@@ -5,12 +5,15 @@
 replicaCount: 1
 
 git:
-  branch: master
-  
+  branch: master  
   # for projects based on maven modules, specify the top-level url in order to import the dependencies
   url: ""
   # for projects based on maven modules, builds the specified sub-module 
   module: ""
+  
+# specify a docker image if you don't want to build from source 
+# docker:
+#   image: registry.gitlab.com/prft_rh/provider-search-poc/search-service:latest
 
 nameOverride: ""
 fullnameOverride: ""

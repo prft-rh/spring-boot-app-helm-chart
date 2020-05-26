@@ -9,3 +9,16 @@ metadata:
 spec:
   lookupPolicy:
     local: false
+  {{ if .Values.image_name }}
+  tags:
+    - name: latest
+      annotations:
+        openshift.io/imported-from: '{{ .Values.docker.image }}'
+      from:
+        kind: DockerImage
+        name: '{{ .Values.docker.image }}'
+      generation: 9
+      importPolicy: {}
+      referencePolicy:
+        type: Source
+  {{ end }}
