@@ -12,8 +12,8 @@ git:
   module: ""
   
 # specify a docker image if you don't want to build from source 
-# docker:
-#   image: registry.gitlab.com/prft_rh/provider-search-poc/search-service:latest
+docker:
+  image: ""
 
 nameOverride: ""
 fullnameOverride: ""
