@@ -9,7 +9,7 @@ metadata:
 spec:
   lookupPolicy:
     local: false
-  {{ if .Values.image_name }}
+  {{ if .Values.docker.image }}
   tags:
     - name: latest
       annotations:

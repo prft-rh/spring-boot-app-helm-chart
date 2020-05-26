@@ -3,12 +3,12 @@ entries:
   spring-boot:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2020-05-22T10:12:45.9036513-04:00"
+    created: "2020-05-26T16:41:40.5217704-04:00"
     description: A Helm chart to deploy a Spring Boot application from a git repository
-    digest: b86b186fb0c891c8ca6b56d3faa8485f98b37b033ce702df7fdbf6c746286cda
+    digest: da0ff955502eb5b8bf3e1903ac6a2a25796d5bc59103237cae4df312446cde68
     name: spring-boot
     type: application
     urls:
-    - spring-boot-0.1.3.tgz
-    version: 0.1.3
-generated: "2020-05-22T10:12:45.902651-04:00"
+    - spring-boot-0.1.0.tgz
+    version: 0.1.0
+generated: "2020-05-26T16:41:40.5179073-04:00"
