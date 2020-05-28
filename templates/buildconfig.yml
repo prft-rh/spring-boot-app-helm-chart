@@ -26,6 +26,11 @@ spec:
         kind: ImageStreamTag
         namespace: openshift
         name: 'java:11'
+      env:
+        {{ if .Values.maven.mirror }}
+        - name: MAVEN_MIRROR_URL
+          value: {{ .Values.maven.mirror }}
+        {{ end }}
   postCommit: {}
   source:
     type: Git

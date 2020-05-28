@@ -14,12 +14,16 @@ git:
 # specify a docker image if you don't want to build from source 
 docker:
   image: ""
+  
+maven:
+  mirror: ""
 
 nameOverride: ""
 fullnameOverride: ""
 
 serviceAccount:
   annotations: {}
+  createRole: true
 
 podAnnotations: {}
 
