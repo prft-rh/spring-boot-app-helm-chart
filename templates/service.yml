@@ -4,7 +4,7 @@ metadata:
   name: {{ include "spring-boot.fullname" . }}
   labels:
     {{- include "spring-boot.labels" . | nindent 4 }}
-    prometheus:spring-boot-service
+    prometheus: spring-boot-service
   annotations:
     {{- include "spring-boot.annotations" . | nindent 4 }}
 spec:

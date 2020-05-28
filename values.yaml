@@ -18,6 +18,9 @@ docker:
 nameOverride: ""
 fullnameOverride: ""
 
+serviceAccount:
+  annotations: {}
+
 podAnnotations: {}
 
 # default Spring Boot port, override to reflect server.port config
