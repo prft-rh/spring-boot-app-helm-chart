@@ -43,7 +43,7 @@ spec:
       labels:
         {{- include "spring-boot.selectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ include "spring-boot.serviceAccountName" . }}
+      serviceAccountName: {{ .Release.Name }}
       containers:
         - name: {{ .Chart.Name }}
           readinessProbe:
