@@ -75,6 +75,8 @@ spec:
               containerPort: 8778
               protocol: TCP
           env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: kubernetes
             - name: SPRING_APPLICATION_NAME
               value: {{ include "spring-boot.fullname" . }}
             - name: KUBERNETES_NAMESPACE
