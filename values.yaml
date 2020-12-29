@@ -23,7 +23,6 @@ fullnameOverride: ""
 
 serviceAccount:
   annotations: {}
-  createRole: true
 
 podAnnotations: {}
 
