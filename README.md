@@ -22,8 +22,12 @@ The DeploymentConfig will setup the readiness and liveness probe to ping the act
 A Service will expose port 8080 with a prometheus:spring-boot-service label to enable monitoring
 A Route will expose a public URL on port 8080 pointing to the Service
 
-To make changes to the chart and index as helm repo:
+Generating the operator:
 
-helm dependency update
-helm package .
-helm repo index .
+mkdir spring-boot
+cd spring boot
+operator-sdk init --plugins=helm --domain=com.perficient --group=apimc --version=v1alpha1 --kind=SpringBootApp --helm-chart=/path-to-chart
+make install
+export IMG=quay.io/mrethers/spring-boot-operator:v0.0.14
+make docker-build docker-push IMG=$IMG
+make deploy IMG=$IMG

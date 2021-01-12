@@ -20,16 +20,6 @@ spec:
       maxSurge: 25%
     resources: {}
     activeDeadlineSeconds: 21600
-  triggers:
-    - type: ImageChange
-      imageChangeParams:
-        automatic: true
-        containerNames:
-          - {{ .Chart.Name }}
-        from:
-          kind: ImageStreamTag
-          name: {{ .Chart.Name }}:latest
-    - type: ConfigChange
   revisionHistoryLimit: 10
   test: false
   selector:
@@ -43,13 +33,17 @@ spec:
       labels:
         {{- include "spring-boot.selectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ .Release.Name }}
+      volumes:
+        - name: spring-config
+          configMap:
+            name: {{ include "spring-boot.fullname" . }}
+            defaultMode: 420
       containers:
         - name: {{ .Chart.Name }}
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 8080
+              port: 8081
               scheme: HTTP
             initialDelaySeconds: 10
             timeoutSeconds: 1
@@ -59,28 +53,34 @@ spec:
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 8080
+              port: 8081
               scheme: HTTP
             initialDelaySeconds: 180
             timeoutSeconds: 1
             periodSeconds: 10
             successThreshold: 1
             failureThreshold: 3
-          image: "{{ .Chart.Name }}:latest"
+          image: "{{ .Values.docker.image }}"
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
             - name: management
-              containerPort: 8081
+              containerPort: {{ .Values.management.port }}
               protocol: TCP
           env:
             - name: SPRING_APPLICATION_NAME
               value: {{ include "spring-boot.fullname" . }}
             - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
-              value: health,info,prometheus
+              value: "health,info,prometheus"
+            - name: SERVER_PORT
+              value: "{{ .Values.service.port }}"
             - name: MANAGEMENT_SERVER_PORT
-              value: 8081
+              value: "{{ .Values.management.port }}"
+            - name: SPRING_CLOUD_KUBERNETES_CONFIG_ENABLEAPI
+              value: "false"
+            - name: SPRING_CLOUD_KUBERNETES_CONFIG_PATHS
+              value: "/etc/config/application.properties"
             - name: KUBERNETES_NAMESPACE
               valueFrom:
                 fieldRef:
@@ -88,6 +88,9 @@ spec:
                   fieldPath: metadata.namespace
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: spring-config
+              mountPath: /etc/config
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           imagePullPolicy: Always

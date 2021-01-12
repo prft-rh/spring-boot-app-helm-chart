@@ -15,6 +15,9 @@ git:
 docker:
   image: ""
   
+config:
+  repo: ""
+  
 maven:
   mirror: ""
 
@@ -29,6 +32,9 @@ podAnnotations: {}
 # default Spring Boot port, override to reflect server.port config
 service:
   port: 8080
+  
+management:
+  port: 8081
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

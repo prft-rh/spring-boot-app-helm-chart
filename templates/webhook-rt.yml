@@ -1,0 +1,20 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: el-{{ include "spring-boot.fullname" . }}
+  labels:
+    app.kubernetes.io/managed-by: EventListener
+    app.kubernetes.io/part-of: Triggers
+    eventlistener: {{ include "spring-boot.fullname" . }}
+spec:
+  host: ""
+  to:
+    kind: Service
+    name: el-{{ include "spring-boot.fullname" . }}
+    weight: 100
+  port:
+    targetPort: http-listener
+  wildcardPolicy: None
+status:
+  ingress:
+    - host: ""
