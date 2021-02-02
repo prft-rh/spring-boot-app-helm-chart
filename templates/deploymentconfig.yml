@@ -38,6 +38,7 @@ spec:
           configMap:
             name: {{ include "spring-boot.fullname" . }}
             defaultMode: 420
+            optional: true
       containers:
         - name: {{ .Chart.Name }}
           readinessProbe:

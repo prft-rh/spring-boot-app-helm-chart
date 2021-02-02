@@ -44,6 +44,7 @@ Common labels
 */}}
 {{- define "spring-boot.labels" -}}
 helm.sh/chart: {{ include "spring-boot.chart" . }}
+perficient.com/runtime: spring-boot
 {{ include "spring-boot.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}

@@ -14,8 +14,10 @@ spec:
           - name: app-name
             value: {{ include "spring-boot.fullname" . }}
           - name: image-repo
-            value: {{ .Values.docker.image }}
+            value: {{ .Values.docker.repo }}
           - name: config-repo
             value: {{ .Values.config.repo }}
+          - name: workspace
+            value: workspace-{{ include "spring-boot.fullname" . }}
     template:
       name: devopsinabox
