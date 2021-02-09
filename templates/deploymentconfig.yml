@@ -31,7 +31,7 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       labels:
-        {{- include "spring-boot.selectorLabels" . | nindent 8 }}
+        {{- include "spring-boot.labels" . | nindent 8 }}
     spec:
       volumes:
         - name: spring-config
