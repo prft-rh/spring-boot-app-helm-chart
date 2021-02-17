@@ -3,6 +3,7 @@ apiVersion: apps.openshift.io/v1
 metadata:
   annotations:
     {{- include "spring-boot.annotations" . | nindent 4 }}
+    lastDeployed: {{ now | quote }}
   name: {{ include "spring-boot.fullname" . }}
   labels:
     {{- include "spring-boot.labels" . | nindent 4 }}
@@ -32,6 +33,7 @@ spec:
     {{- end }}
       labels:
         {{- include "spring-boot.labels" . | nindent 8 }}
+        version: default
     spec:
       volumes:
         - name: spring-config
@@ -44,7 +46,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 8081
+              port: {{ .Values.management.port }}
               scheme: HTTP
             initialDelaySeconds: 10
             timeoutSeconds: 1
@@ -54,7 +56,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 8081
+              port: {{ .Values.management.port }}
               scheme: HTTP
             initialDelaySeconds: 180
             timeoutSeconds: 1
@@ -100,3 +102,112 @@ spec:
       dnsPolicy: ClusterFirst
       securityContext: {}
       schedulerName: default-scheduler
+      
+{{- if .Values.version }}
+{{- $top := . -}}
+---
+kind: DeploymentConfig
+apiVersion: apps.openshift.io/v1
+metadata:
+  annotations:
+    {{- include "spring-boot.annotations" . | nindent 4 }}
+    lastDeployed: {{ now | quote }}
+  name: {{ include "spring-boot.fullname" . }}
+  labels:
+    {{- include "spring-boot.labels" . | nindent 4 }}
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  strategy:
+    type: Rolling
+    rollingParams:
+      updatePeriodSeconds: 1
+      intervalSeconds: 1
+      timeoutSeconds: 600
+      maxUnavailable: 25%
+      maxSurge: 25%
+    resources: {}
+    activeDeadlineSeconds: 21600
+  revisionHistoryLimit: 10
+  test: false
+  selector:
+    {{- include "spring-boot.selectorLabels" . | nindent 4 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "spring-boot.labels" . | nindent 8 }}
+        version: {{ .Values.version.name }}
+    spec:
+      volumes:
+        - name: spring-config
+          configMap:
+            name: {{ include "spring-boot.fullname" . }}-{{ .Values.version.name }}
+            defaultMode: 420
+            optional: true
+      containers:
+        - name: {{ .Chart.Name }}
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: {{ .Values.management.port }}
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: {{ .Values.management.port }}
+              scheme: HTTP
+            initialDelaySeconds: 180
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          image: "{{ .Values.version.image }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+            - name: management
+              containerPort: {{ .Values.management.port }}
+              protocol: TCP
+          env:
+            - name: SPRING_APPLICATION_NAME
+              value: {{ include "spring-boot.fullname" . }}
+            - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
+              value: "health,info,prometheus"
+            - name: SERVER_PORT
+              value: "{{ .Values.service.port }}"
+            - name: MANAGEMENT_SERVER_PORT
+              value: "{{ .Values.management.port }}"
+            - name: SPRING_CLOUD_KUBERNETES_CONFIG_ENABLEAPI
+              value: "false"
+            - name: SPRING_CLOUD_KUBERNETES_CONFIG_PATHS
+              value: "/etc/config/application.properties"
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: spring-config
+              mountPath: /etc/config
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+{{- end }}

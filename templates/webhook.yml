@@ -5,7 +5,12 @@ metadata:
 spec:
   serviceAccountName: pipeline
   triggers:
-  - bindings:
+  - interceptors:
+    - cel:
+      filter: >-
+        (header.match('X-GitHub-Event', 'push') &&
+        body.ref.startsWith('refs/heads/{{ .Values.git.branch }}')
+    bindings:
     - name: common-bindings
       ref: devopsinabox-github
     - name: message-binding
@@ -19,5 +24,30 @@ spec:
             value: {{ .Values.config.repo }}
           - name: workspace
             value: workspace-{{ include "spring-boot.fullname" . }}
+          - name: image-field-name
+            value: "spec.docker.image"
+    template:
+      name: devopsinabox
+  - interceptors:
+    - cel:
+      filter: >-
+        (header.match('X-GitHub-Event', 'push') &&
+        body.ref.startsWith('refs/heads/{{ .Values.version.branch }}')
+    bindings:
+    - name: common-bindings
+      ref: devopsinabox-github
+    - name: message-binding
+      spec:
+        params:
+          - name: app-name
+            value: {{ include "spring-boot.fullname" . }}
+          - name: image-repo
+            value: {{ .Values.docker.repo }}
+          - name: config-repo
+            value: {{ .Values.config.repo }}
+          - name: workspace
+            value: workspace-{{ include "spring-boot.fullname" . }}
+          - name: image-field-name
+            value: "spec.version.image"
     template:
       name: devopsinabox
