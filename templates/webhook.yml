@@ -7,9 +7,9 @@ spec:
   triggers:
   - interceptors:
     - cel:
-      filter: >-
-        (header.match('X-GitHub-Event', 'push') &&
-        body.ref.startsWith('refs/heads/{{ .Values.git.branch }}')
+        filter: >-
+          (header.match('X-GitHub-Event', 'push') &&
+          body.ref.startsWith('refs/heads/{{ .Values.git.branch }}')
     bindings:
     - name: common-bindings
       ref: devopsinabox-github
@@ -30,9 +30,9 @@ spec:
       name: devopsinabox
   - interceptors:
     - cel:
-      filter: >-
-        (header.match('X-GitHub-Event', 'push') &&
-        body.ref.startsWith('refs/heads/{{ .Values.version.branch }}')
+        filter: >-
+          (header.match('X-GitHub-Event', 'push') &&
+          body.ref.startsWith('refs/heads/{{ .Values.version.branch }}')
     bindings:
     - name: common-bindings
       ref: devopsinabox-github

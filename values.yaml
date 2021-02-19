@@ -57,6 +57,6 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
   
 version:
-  name: v2
-  branch: v2
+  name: ""
+  branch: ""
   image: ""
