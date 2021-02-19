@@ -9,7 +9,7 @@ spec:
     - cel:
         filter: >-
           (header.match('X-GitHub-Event', 'push') &&
-          body.ref.startsWith('refs/heads/{{ .Values.git.branch }}')
+          body.ref.startsWith('refs/heads/{{ .Values.git.branch }}'))
     bindings:
     - name: common-bindings
       ref: devopsinabox-github
@@ -28,11 +28,13 @@ spec:
             value: "spec.docker.image"
     template:
       name: devopsinabox
+  {{- if .Values.version.name }}
+  {{- $top := . }}
   - interceptors:
     - cel:
         filter: >-
           (header.match('X-GitHub-Event', 'push') &&
-          body.ref.startsWith('refs/heads/{{ .Values.version.branch }}')
+          body.ref.startsWith('refs/heads/{{ .Values.version.branch }}'))
     bindings:
     - name: common-bindings
       ref: devopsinabox-github
@@ -51,3 +53,4 @@ spec:
             value: "spec.version.image"
     template:
       name: devopsinabox
+  {{- end }}

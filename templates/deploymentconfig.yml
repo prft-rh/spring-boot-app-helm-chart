@@ -103,8 +103,8 @@ spec:
       securityContext: {}
       schedulerName: default-scheduler
       
-{{- if .Values.version }}
-{{- $top := . -}}
+{{- if .Values.version.name }}
+{{- $top := . }}
 ---
 kind: DeploymentConfig
 apiVersion: apps.openshift.io/v1
@@ -112,7 +112,7 @@ metadata:
   annotations:
     {{- include "spring-boot.annotations" . | nindent 4 }}
     lastDeployed: {{ now | quote }}
-  name: {{ include "spring-boot.fullname" . }}
+  name: {{ include "spring-boot.fullname" . }}-{{ .Values.version.name }}
   labels:
     {{- include "spring-boot.labels" . | nindent 4 }}
 spec:
