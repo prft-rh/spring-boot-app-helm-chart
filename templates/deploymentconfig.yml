@@ -27,11 +27,11 @@ spec:
     {{- include "spring-boot.selectorLabels" . | nindent 4 }}
   template:
     metadata:
-    {{- with .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
         sidecar.istio.io/inject: "true"
-    {{- end }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       labels:
         {{- include "spring-boot.labels" . | nindent 8 }}
         version: default
@@ -136,11 +136,11 @@ spec:
     {{- include "spring-boot.selectorLabels" . | nindent 4 }}
   template:
     metadata:
-    {{- with .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
         sidecar.istio.io/inject: "true"
-    {{- end }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       labels:
         {{- include "spring-boot.labels" . | nindent 8 }}
         version: {{ .Values.version.name }}
