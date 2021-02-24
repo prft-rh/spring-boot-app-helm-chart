@@ -9,11 +9,11 @@ metadata:
     {{- include "spring-boot.annotations" . | nindent 4 }}
 spec:
   ports:
-    - name: http
+    - name: http-service
       protocol: TCP
       port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.port }}
-    - name: management
+    - name: http-management
       protocol: TCP
       port: {{ .Values.management.port }}
       targetPort: {{ .Values.management.port }}

@@ -66,10 +66,10 @@ spec:
             failureThreshold: 3
           image: "{{ .Values.docker.image }}"
           ports:
-            - name: http
+            - name: http-service
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-            - name: management
+            - name: http-management
               containerPort: {{ .Values.management.port }}
               protocol: TCP
           env:
