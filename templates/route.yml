@@ -14,7 +14,7 @@ spec:
     weight: 100
   host: ""
   port:
-    targetPort: http
+    targetPort: http-service
   wildcardPolicy: None
 status:
   ingress:
