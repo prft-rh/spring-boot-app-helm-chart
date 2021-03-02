@@ -64,7 +64,7 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             failureThreshold: 3
-          image: "{{ .Values.docker.image }}"
+          image: "{{ .Values.container.image }}"
           ports:
             - name: http-service
               containerPort: {{ .Values.service.port }}

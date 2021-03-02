@@ -11,10 +11,10 @@ git:
   # for projects based on maven modules, builds the specified sub-module 
   module: ""
   
-# specify a docker image if you don't want to build from source 
-docker:
+# specify a container image if you don't want to build from source 
+container:
   image: "placeholder"
-  repo: ""
+  registry: ""
   
 config:
   repo: ""
