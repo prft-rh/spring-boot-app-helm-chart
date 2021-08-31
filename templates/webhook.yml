@@ -11,23 +11,19 @@ spec:
           (header.match('X-GitHub-Event', 'push') &&
           body.ref.startsWith('refs/heads/{{ .Values.git.branch }}'))
     bindings:
-    - name: common-bindings
-      ref: devopsinabox-github
-    - name: message-binding
-      spec:
-        params:
-          - name: app-name
-            value: {{ include "spring-boot.fullname" . }}
-          - name: image-repo
-            value: {{ .Values.container.registry }}
-          - name: config-repo
-            value: {{ .Values.config.repo }}
-          - name: workspace
-            value: workspace-{{ include "spring-boot.fullname" . }}
-          - name: image-field-name
-            value: "spec.container.image"
+    - ref: devopsinabox-github
+    - name: app-name
+      value: {{ include "spring-boot.fullname" . }}
+    - name: image-repo
+      value: {{ .Values.container.registry }}
+    - name: config-repo
+      value: {{ .Values.config.repo }}
+    - name: workspace
+      value: workspace-{{ include "spring-boot.fullname" . }}
+    - name: image-field-name
+      value: "spec.container.image"
     template:
-      name: devopsinabox
+      ref: devopsinabox
   {{- if .Values.version.name }}
   {{- $top := . }}
   - interceptors:
