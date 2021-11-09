@@ -8,8 +8,9 @@ spec:
   - interceptors:
     - cel:
         filter: >-
-          (body.match('eventType', 'git.push') &&
-          body.refUpdates.startsWith('refs/heads/{{ .Values.git.branch }}'))
+          (body.eventType == 'git.push' &&
+          body.resource.refUpdates[0].name.startsWith('refs/heads/{{
+          .Values.git.branch }}'))
     bindings:
     - ref: devopsinabox-github
     - name: app-name
