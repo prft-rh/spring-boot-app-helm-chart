@@ -8,8 +8,8 @@ spec:
   - interceptors:
     - cel:
         filter: >-
-          (header.match('X-GitHub-Event', 'push') &&
-          body.ref.startsWith('refs/heads/{{ .Values.git.branch }}'))
+          (body.match('eventType', 'git.push') &&
+          body.refUpdates.startsWith('refs/heads/{{ .Values.git.branch }}'))
     bindings:
     - ref: devopsinabox-github
     - name: app-name
@@ -29,8 +29,8 @@ spec:
   - interceptors:
     - cel:
         filter: >-
-          (header.match('X-GitHub-Event', 'push') &&
-          body.ref.startsWith('refs/heads/{{ .Values.version.branch }}'))
+          (body.match('eventType', 'git.push') &&
+          body.refUpdates.startsWith('refs/heads/{{ .Values.version.branch }}'))
     bindings:
     - ref: devopsinabox-github
       - name: app-name
