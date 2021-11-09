@@ -36,6 +36,11 @@ spec:
         {{- include "spring-boot.labels" . | nindent 8 }}
         version: default
     spec:
+{{- if .Values.serviceAccount }}
+{{- if .Values.serviceAccount.name }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
       volumes:
         - name: spring-config
           configMap:

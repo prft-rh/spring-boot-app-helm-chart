@@ -26,6 +26,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 serviceAccount:
+  name:
   annotations: {}
 
 podAnnotations: {}
