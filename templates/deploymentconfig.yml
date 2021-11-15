@@ -3,7 +3,6 @@ apiVersion: apps.openshift.io/v1
 metadata:
   annotations:
     {{- include "spring-boot.annotations" . | nindent 4 }}
-    lastDeployed: {{ now | quote }}
   name: {{ include "spring-boot.fullname" . }}
   labels:
     {{- include "spring-boot.labels" . | nindent 4 }}
