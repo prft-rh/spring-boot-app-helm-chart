@@ -25,7 +25,7 @@ maven:
   mirror: ""
   
 dockerfile:
-  repo: git@github.com:prft-rh/dockerfile-java11.git
+  repo: https://github.com/prft-rh/dockerfile-java11.git
 
 nameOverride: ""
 fullnameOverride: ""
