@@ -79,6 +79,10 @@ spec:
           env:
             - name: SPRING_APPLICATION_NAME
               value: {{ include "spring-boot.fullname" . }}
+            - name: MANAGEMENT_METRICS_TAGS_application
+              value: {{ include "spring-boot.fullname" . }}
+            - name: MANAGEMENT_METRICS_TAGS_operator
+              value: spring-boot
             - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
               value: "health,info,prometheus"
             - name: SERVER_PORT
