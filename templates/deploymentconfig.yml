@@ -3,7 +3,6 @@ apiVersion: apps.openshift.io/v1
 metadata:
   annotations:
     {{- include "spring-boot.annotations" . | nindent 4 }}
-    lastDeployed: {{ now | quote }}
   name: {{ include "spring-boot.fullname" . }}
   labels:
     {{- include "spring-boot.labels" . | nindent 4 }}
@@ -36,6 +35,11 @@ spec:
         {{- include "spring-boot.labels" . | nindent 8 }}
         version: default
     spec:
+{{- if .Values.serviceAccount }}
+{{- if .Values.serviceAccount.name }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
       volumes:
         - name: spring-config
           configMap:

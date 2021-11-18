@@ -15,17 +15,24 @@ git:
 container:
   image: "placeholder"
   registry: ""
-  
+
+# repository that contains the app manifest  
 config:
   repo: ""
-  
+  # todo: add file path option
+
 maven:
   mirror: ""
+
+# base image for spring boot containers  
+dockerfile:
+  repo: https://github.com/prft-rh/dockerfile-java11.git
 
 nameOverride: ""
 fullnameOverride: ""
 
 serviceAccount:
+  name:
   annotations: {}
 
 podAnnotations: {}
