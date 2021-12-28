@@ -27,6 +27,10 @@ maven:
 dockerfile:
   repo: https://github.com/prft-rh/dockerfile-java11.git
 
+# base image for spring boot containers  
+dockerfile:
+  repo: https://github.com/prft-rh/dockerfile-java11.git
+
 nameOverride: ""
 fullnameOverride: ""
 
