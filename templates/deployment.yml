@@ -1,5 +1,5 @@
-kind: DeploymentConfig
-apiVersion: apps.openshift.io/v1
+kind: Deployment
+apiVersion: apps/v1
 metadata:
   annotations:
     {{- include "spring-boot.annotations" . | nindent 4 }}
@@ -13,17 +13,13 @@ spec:
   strategy:
     type: Rolling
     rollingParams:
-      updatePeriodSeconds: 1
-      intervalSeconds: 1
-      timeoutSeconds: 600
       maxUnavailable: 25%
       maxSurge: 25%
     resources: {}
     activeDeadlineSeconds: 21600
-  revisionHistoryLimit: 10
-  test: false
   selector:
-    {{- include "spring-boot.selectorLabels" . | nindent 4 }}
+    matchLabels:
+      {{- include "spring-boot.selectorLabels" . | nindent 4 }}
   template:
     metadata:
       annotations:
@@ -133,9 +129,6 @@ spec:
   strategy:
     type: Rolling
     rollingParams:
-      updatePeriodSeconds: 1
-      intervalSeconds: 1
-      timeoutSeconds: 600
       maxUnavailable: 25%
       maxSurge: 25%
     resources: {}
@@ -143,7 +136,8 @@ spec:
   revisionHistoryLimit: 10
   test: false
   selector:
-    {{- include "spring-boot.selectorLabels" . | nindent 4 }}
+    matchLabels:
+      {{- include "spring-boot.selectorLabels" . | nindent 4 }}
   template:
     metadata:
       annotations:
