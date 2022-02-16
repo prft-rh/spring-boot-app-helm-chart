@@ -20,6 +20,8 @@ spec:
       value: {{ .Values.git.url }}
     - name: config-repo
       value: {{ .Values.config.repo }}
+    - name: dockerfile-repo
+      value: {{ .Values.dockerfile.repo }}
     - name: workspace
       value: workspace-{{ include "spring-boot.fullname" . }}
     - name: image-field-name
