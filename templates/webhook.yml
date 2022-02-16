@@ -16,7 +16,7 @@ spec:
       value: {{ include "spring-boot.fullname" . }}
     - name: image-repo
       value: {{ .Values.container.registry }}
-    - name: app-repo
+    - name: git-repo-url
       value: {{ .Values.git.url }}
     - name: config-repo
       value: {{ .Values.config.repo }}
