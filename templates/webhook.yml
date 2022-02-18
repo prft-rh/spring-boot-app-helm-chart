@@ -25,7 +25,7 @@ spec:
     - name: workspace
       value: workspace-{{ include "spring-boot.fullname" . }}
     - name: image-field-name
-      value: "spec.container.image"
+      value: ".spec.container.image"
     template:
       ref: devopsinabox
   {{- if .Values.version.name }}
@@ -48,7 +48,7 @@ spec:
       - name: workspace
         value: workspace-{{ include "spring-boot.fullname" . }}
       - name: image-field-name
-        value: "spec.version.image"
+        value: ".spec.version.image"
     template:
       name: devopsinabox
   {{- end }}
