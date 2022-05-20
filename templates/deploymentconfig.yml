@@ -99,7 +99,7 @@ spec:
             - name: SPRING_CLOUD_KUBERNETES_ENABLED
               value: "true"
             - name: SPRING_CONFIG_LOCATION
-              value: "file:///etc/config/application.properties,file:///etc/secrets/application.properties"
+              value: "optional:file:///etc/config/application.properties,optional:file:///etc/secrets/application.properties"
             - name: KUBERNETES_NAMESPACE
               valueFrom:
                 fieldRef:
@@ -226,7 +226,7 @@ spec:
             - name: SPRING_CLOUD_KUBERNETES_ENABLED
               value: "true"
             - name: SPRING_CONFIG_LOCATION
-              value: "file:///etc/config/application.properties,file:///etc/secrets/application.properties"
+              value: "optional:file:///etc/config/application.properties,optional:file:///etc/secrets/application.properties"
             - name: KUBERNETES_NAMESPACE
               valueFrom:
                 fieldRef:
