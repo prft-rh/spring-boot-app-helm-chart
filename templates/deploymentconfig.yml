@@ -46,6 +46,11 @@ spec:
             name: {{ include "spring-boot.fullname" . }}
             defaultMode: 420
             optional: true
+        - name: spring-secrets
+          secret:
+            secretName: {{ include "spring-boot.fullname" . }}
+            defaultMode: 420
+            optional: true
       containers:
         - name: {{ .Chart.Name }}
           readinessProbe:
@@ -93,18 +98,24 @@ spec:
               value: "false"
             - name: SPRING_CLOUD_KUBERNETES_ENABLED
               value: "true"
-            - name: SPRING_CLOUD_KUBERNETES_CONFIG_PATHS
-              value: "/etc/config/application.properties"
+            - name: SPRING_CONFIG_LOCATION
+              value: "file:///etc/config/application.properties,file:///etc/secrets/application.properties"
             - name: KUBERNETES_NAMESPACE
               valueFrom:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace
+            {{- range $k, $v := .Values.env }}
+            - name: {{ $v.name }}
+              value: {{ $v.value | quote }}
+            {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: spring-config
               mountPath: /etc/config
+            - name: spring-secrets
+              mountPath: /etc/secrets
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           imagePullPolicy: Always
@@ -161,6 +172,11 @@ spec:
             name: {{ include "spring-boot.fullname" . }}-{{ .Values.version.name }}
             defaultMode: 420
             optional: true
+        - name: spring-secrets
+          configMap:
+            name: {{ include "spring-boot.fullname" . }}-{{ .Values.version.name }}
+            defaultMode: 420
+            optional: true
       containers:
         - name: {{ .Chart.Name }}
           readinessProbe:
@@ -192,8 +208,13 @@ spec:
               containerPort: {{ .Values.management.port }}
               protocol: TCP
           env:
+            env:
             - name: SPRING_APPLICATION_NAME
-              value: {{ include "spring-boot.fullname" . }}
+              value: {{ include "spring-boot.fullname" . }}-{{ .Values.version.name }}
+            - name: MANAGEMENT_METRICS_TAGS_application
+              value: {{ include "spring-boot.fullname" . }}-{{ .Values.version.name }}
+            - name: MANAGEMENT_METRICS_TAGS_operator
+              value: spring-boot
             - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
               value: "health,info,prometheus"
             - name: SERVER_PORT
@@ -202,18 +223,26 @@ spec:
               value: "{{ .Values.management.port }}"
             - name: SPRING_CLOUD_KUBERNETES_CONFIG_ENABLEAPI
               value: "false"
-            - name: SPRING_CLOUD_KUBERNETES_CONFIG_PATHS
-              value: "/etc/config/application.properties"
+            - name: SPRING_CLOUD_KUBERNETES_ENABLED
+              value: "true"
+            - name: SPRING_CONFIG_LOCATION
+              value: "file:///etc/config/application.properties,file:///etc/secrets/application.properties"
             - name: KUBERNETES_NAMESPACE
               valueFrom:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace
+            {{- range $k, $v := .Values.env }}
+            - name: {{ $v.name }}
+              value: {{ $v.value | quote }}
+            {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - name: spring-config
               mountPath: /etc/config
+            - name: spring-secrets
+              mountPath: /etc/secrets
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           imagePullPolicy: Always

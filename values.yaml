@@ -42,7 +42,14 @@ service:
   
 management:
   port: 8081
-
+  
+env: {}
+  #- name:
+  #  value:
+  #- name:
+  #  value:
+  # ...
+  
 resources:
   limits:
     cpu: 300m
