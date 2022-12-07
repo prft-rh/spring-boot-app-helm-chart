@@ -6,10 +6,16 @@ spec:
   serviceAccountName: pipeline
   triggers:
   - interceptors:
-    - cel:
-        filter: >-
-          (header.match('X-GitHub-Event', 'push') &&
-          body.ref.startsWith('refs/heads/{{ .Values.git.branch }}'))
+    - params:
+        - name: filter
+          value: >-
+            (header.match('X-GitHub-Event', 'push') &&
+            body.ref.startsWith('refs/heads/master'))
+        - name: overlays
+          value: null
+      ref:
+        kind: ClusterInterceptor
+        name: cel
     bindings:
     - ref: devopsinabox-github
     - name: app-name
@@ -31,10 +37,16 @@ spec:
   {{- if .Values.version.name }}
   {{- $top := . }}
   - interceptors:
-    - cel:
-        filter: >-
-          (header.match('X-GitHub-Event', 'push') &&
-          body.ref.startsWith('refs/heads/{{ .Values.version.branch }}'))
+    - params:
+        - name: filter
+          value: >-
+            (header.match('X-GitHub-Event', 'push') &&
+            body.ref.startsWith('refs/heads/{{ .Values.version.branch }}'))
+        - name: overlays
+          value: null
+      ref:
+        kind: ClusterInterceptor
+        name: cel
     bindings:
     - ref: devopsinabox-github
       - name: app-name
