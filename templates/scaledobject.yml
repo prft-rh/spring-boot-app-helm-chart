@@ -1,0 +1,28 @@
+{{- if .Values.autoscaling.enabled }}
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ include "spring-boot.fullname" . }}
+  labels:
+    scaledobject.keda.sh/name: {{ include "spring-boot.fullname" . }}
+spec:
+  cooldownPeriod: 100
+  maxReplicaCount: {{ .Values.autoscaling.maxReplicas }}
+  minReplicaCount: {{ .Values.autoscaling.minReplicas }}
+  pollingInterval: 30
+  scaleTargetRef:
+    apiVersion: apps.openshift.io/v1
+    kind: DeploymentConfig
+    name: {{ include "spring-boot.fullname" . }}
+  triggers:
+    - metadata:
+        metricName: http_requests_total
+        query: >-
+          sum(rate(http_server_requests_seconds_count{application="{{ include "spring-boot.fullname" . }}"}[1m]))
+        serverAddress: 'https://thanos-querier.openshift-monitoring.svc.cluster.local:9091'
+        threshold: '{{ .Values.autoscaling.targetRps }}'
+        authModes: "bearer"
+      type: prometheus
+      authenticationRef:
+        name: {{ include "devops-in-a-box.fullname" . }}-thanos
+{{- end }}
